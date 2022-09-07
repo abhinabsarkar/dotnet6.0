@@ -6,28 +6,44 @@
 trigger:
 - main
 
-pool:
-  vmImage: ubuntu-latest
+stages:
+- stage: Build
+  jobs:
+  - job: Build
 
-variables:
-  buildConfiguration: 'Release'
+    pool:
+      vmImage: ubuntu-latest
 
-steps:
-# install 6.0.x SDK
-- task: UseDotNet@2
-  displayName: 'Install .NET Core SDK'
-  inputs:
-    version: '6.0.x'
-# restore dependencies
-- task: DotNetCoreCLI@2
-  displayName: Restore
-  inputs:
-    command: 'restore'
-    projects: 'src/*.csproj'
-# build the dotnet app inside the folder src
-- task: DotNetCoreCLI@2
-  displayName: Build
-  inputs:
-    command: 'build'
-    projects: 'src/*.csproj'
-    arguments: '--configuration $(buildConfiguration)'
+    variables:
+      buildConfiguration: 'Release'
+
+    steps:
+
+    # install 6.0.x SDK
+    - task: UseDotNet@2
+      displayName: 'Install .NET Core SDK'
+      inputs:
+        version: '6.0.x'
+
+    # restore dependencies
+    - task: DotNetCoreCLI@2
+      displayName: Restore
+      inputs:
+        command: 'restore'
+        projects: 'src/*.csproj'
+
+    # build the dotnet app inside the folder src
+    - task: DotNetCoreCLI@2
+      displayName: Build
+      inputs:
+        command: 'build'
+        projects: 'src/*.csproj'
+        arguments: '--configuration $(buildConfiguration)'
+
+# # Publish artifacts & create a zip file as output for deployment
+# - task: DotNetCoreCLI@2
+#   inputs:
+#     command: publish
+#     publishWebProjects: True
+#     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+#     zipAfterPublish: True
