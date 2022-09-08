@@ -49,7 +49,7 @@ stages:
         arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
         zipAfterPublish: True        
 
-    # Publish build artifacts  
+    # Publish the zip build artifacts to be made available for download in the deploy
     - task: PublishBuildArtifacts@1
       inputs:
         PathtoPublish: '$(Build.ArtifactStagingDirectory)'
@@ -66,7 +66,7 @@ stages:
 
     steps:  
 
-    # Download build artifacts
+    # Download build artifacts from the build location
     - task: DownloadBuildArtifacts@1
       inputs:
         buildType: 'current'
