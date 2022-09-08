@@ -41,13 +41,13 @@ stages:
         projects: 'src/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
         
-    # # Publish artifacts & create a zip file as output for deployment
-    # - task: DotNetCoreCLI@2
-    #   inputs:
-    #     command: publish
-    #     publishWebProjects: True
-    #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    #     zipAfterPublish: True        
+    # Publish artifacts & create a zip file as output for deployment
+    - task: DotNetCoreCLI@2
+      inputs:
+        command: publish
+        publishWebProjects: True
+        arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+        zipAfterPublish: True        
 
     # Publish build artifacts  
     - task: PublishBuildArtifacts@1
