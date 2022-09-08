@@ -26,3 +26,28 @@ docker rmi dotnetapp:v1.0.0
 ```
 
 ![alt txt](/images/dotnetapp.jpg)
+
+## Azure pipeline yaml
+How to build the [azure-pipelines.yml](azure-pipelines.yml) & host it on Azure Web App?
+
+[Configuring CI/CD Pipelines as Code with YAML in Azure DevOps](https://azuredevopslabs.com/labs/azuredevops/yaml/)
+
+The azure yaml pipeline with different stages (build & deploy), manual validation, approval, etc are shown in the pipeline.
+
+![alt txt](/images/az-pipeline-yaml-cicd.jpg)
+
+### References
+Some of the best practices to secure Azure pipeline
+
+1. Add pipeline permissions to a repository resource - [Add protection to a repository resource - Azure Pipelines | Microsoft Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/repository-resource?view=azure-devops#add-pipeline-permissions-to-a-repository-resource)  
+    * When you use YAML pipelines, you can easily copy the name of a protected resource (for example, a service connection for your production environment) and include that in a different pipeline. Pipeline permissions protect against such copying. Restricting a repository to specific pipelines prevents an unauthorized pipeline in your project from using your repository. Once enabled, only yaml pipeline defined in the repository will be allowed to use it. All the classic pipelines can use this resource.
+2. Define approvals and checks on the repository - [Add protection to a repository resource - Azure Pipelines | Microsoft Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/repository-resource?view=azure-devops#add-a-repository-resource-check)
+    * Add Approvals, so a manual approver is required for each time a pipeline requests the repository.
+3. Add manual validation before the deployment can be initiated - [Azure pipelines yaml - Control deployments with gates and approvals - Azure Pipelines | Microsoft Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/deploy-using-approvals?view=azure-devops#set-up-manual-validation)
+    * Manual validation is especially useful in scenarios where you want to pause a pipeline and validate configuration settings or build packages before starting a computation-intensive job.
+    * Sample - [azure-pipelines.yml](azure-pipelines.yml) - Repos --> ManualValidation
+4. Define approvals & check for an environment in Azure yaml pipeline - [Create target environment - Azure Pipelines | Microsoft Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/environments?view=azure-devops); [Pipeline deployment approvals - Azure Pipelines | Microsoft Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/process/approvals?view=azure-devops&tabs=check-pass); [Pre-deployment approvals in Azure DevOps multistage pipelines](https://gavincampbell.dev/post/azure-devops-predeployment-approval-multistage-pipeline/)
+    * An environment is a collection of resources that you can target with deployments from a pipeline. Typical examples of environment names are Dev, Test, QA, Staging, and Production. 
+    * Sample - azure-pipelines.yml - Repos --> Search for environment 
+5. Deployment gates - [Control releases with deployment gates - Azure Pipelines | Microsoft Docs](https://docs.microsoft.com/en-us/azure/devops/pipelines/release/approvals/gates?view=azure-devops)
+    * Gates allow automatic collection of health signals from external services and then promote the release when all the signals are successful or stop the deployment on timeout. Typically, gates are used in connection with incident management, problem management, change management, monitoring, and external approval systems.
