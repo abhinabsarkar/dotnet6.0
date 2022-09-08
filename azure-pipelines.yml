@@ -7,6 +7,7 @@ trigger:
 - main
 
 stages:
+# Build stage
 - stage: Build
   jobs:
   - job: Build
@@ -39,11 +40,47 @@ stages:
         command: 'build'
         projects: 'src/*.csproj'
         arguments: '--configuration $(buildConfiguration)'
+        
+    # # Publish artifacts & create a zip file as output for deployment
+    # - task: DotNetCoreCLI@2
+    #   inputs:
+    #     command: publish
+    #     publishWebProjects: True
+    #     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
+    #     zipAfterPublish: True        
 
-# # Publish artifacts & create a zip file as output for deployment
-# - task: DotNetCoreCLI@2
-#   inputs:
-#     command: publish
-#     publishWebProjects: True
-#     arguments: '--configuration $(BuildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-#     zipAfterPublish: True
+    # Publish build artifacts  
+    - task: PublishBuildArtifacts@1
+      inputs:
+        PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+        ArtifactName: 'drop'
+        publishLocation: 'Container'
+
+# Deploy stage       
+- stage: Deploy
+  jobs:
+  - job: Deploy
+
+    pool:
+      vmImage: ubuntu-latest
+
+    steps:  
+
+    # Download build artifacts
+    - task: DownloadBuildArtifacts@1
+      inputs:
+        buildType: 'current'
+        downloadType: 'single'
+        downloadPath: '$(System.ArtifactsDirectory)'
+        artifactName: 'drop'
+        
+    # Deploy the code to Azure Web App
+    - task: AzureRmWebAppDeployment@4
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'MCAPS-Hybrid-REQ-38377-2022-abhinabsarkar(9c5ca55e-ea9c-4a3f-b1be-87c76fc15cf8)'
+        appType: 'webAppLinux'
+        WebAppName: 'wa-abhi-dev'
+        packageForLinux: '$(System.ArtifactsDirectory)/drop/*.zip'
+        RuntimeStack: 'DOTNETCORE|6.0'
+
