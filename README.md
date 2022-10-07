@@ -5,7 +5,7 @@ The web application displays the hosting environment details & the current syste
 
 ![alt txt](/images/dotnetapp.jpg)
 
-The docker image can be downloaded from docker hub by running the below command
+The docker image can be downloaded from docker hub by running the below command. The docker image is located at https://hub.docker.com/repository/docker/abhinabsarkar/dotnetapp6.0
 ```cmd
 docker pull abhinabsarkar/dotnetapp6.0:<version>
 ```
