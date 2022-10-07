@@ -1,6 +1,17 @@
 # Sample dotnet application
-A sample dotnet application built on version 6.0. The web application displays the hosting environment.
+A sample dotnet application built on dotnet C# version 6.0. The docker image is built on Alpine linux 6.0. 
 
+The web application displays the hosting environment details & the current system time.
+
+![alt txt](/images/dotnetapp.jpg)
+
+The docker image can be downloaded from docker hub by running the below command
+```cmd
+docker pull abhinabsarkar/dotnetapp6.0:<version>
+```
+Size of the docker image is 115 MB.
+
+## Build the application
 ```bash
 # Build the application using dotnet version 6.0
 cd src
@@ -8,12 +19,12 @@ dotnet build
 # Run the application
 dotnet run
 ```
-Dockerize the application.
+## Dockerize the application.
 ```bash
 # Build the docker image
-docker build -t dotnetapp:v1.0.0 .
+docker build -t dotnetapp6.0:v1.0.0 .
 # Run the docker container locally
-docker run --name dotnetapp-container -d -p 8002:80 dotnetapp:v1.0.0
+docker run --name dotnetapp-container -d -p 8002:80 dotnetapp6.0:v1.0.0
 # Test the app
 curl http://localhost:8002
 # log into the running container 
@@ -25,7 +36,17 @@ docker rm dotnetapp-container -f
 docker rmi dotnetapp:v1.0.0
 ```
 
-![alt txt](/images/dotnetapp.jpg)
+## Push the image to container registry
+```bash
+# Push the image to docker hub
+docker login
+# Tag the local image & map it to the docker repo
+docker tag local-image:tagname new-repo:tagname
+# eg: docker tag dotnetapp6.0:v1.0.0 abhinabsarkar/dotnetapp6.0:v1.0.0
+# push the tagged image to the docker hub
+docker push new-repo:tagname
+# eg: docker push abhinabsarkar/dotnetapp6.0:v1.0.0
+```
 
 ## Azure pipeline yaml
 How to build the [azure-pipelines.yml](azure-pipelines.yml) & host it on Azure Web App?
